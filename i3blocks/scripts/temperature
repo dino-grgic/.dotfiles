@@ -67,3 +67,4 @@ if ($temperature >= $t_crit) {
 }
 
 exit 0;
+
