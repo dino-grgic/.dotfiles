@@ -4,11 +4,11 @@ instance=spotify
 interval=5
 signal=10
 
-#[volume]
-#command=$SCRIPT_DIR/volume
-#label=VOL
-#interval=2
-#signal=10
+[volume]
+command=$SCRIPT_DIR/volume
+label=VOL
+interval=2
+signal=10
 
 [cpu_usage]
 command=$SCRIPT_DIR/cpu_usage
@@ -21,6 +21,12 @@ label=CPU
 #COLOR_NORMAL=#EBDBB2
 #COLOR_WARN=#FFFC00
 #COLOR_CRIT=#FF0000
+
+[battery]
+command=$SCRIPT_DIR/battery_poly
+label=BAT
+interval=30
+signal=10
 
 [temperature]
 command=$SCRIPT_DIR/temperature

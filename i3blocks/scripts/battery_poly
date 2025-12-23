@@ -112,15 +112,24 @@ def get_status(bat_name: str) -> Status:
 
 
 def get_current_charge(bat_name: str) -> int:
-    return int(Path(f"{PSEUDO_FS_PATH}{bat_name}/{CURRENT_CHARGE_FILENAME}").open().read().strip())
+    current_charge_filename = Path(f"{PSEUDO_FS_PATH}{bat_name}/{CURRENT_CHARGE_FILENAME}")
+    if current_charge_filename.exists() == False:
+        return 0
+    return int(current_charge_filename.open().read().strip())
 
 
 def get_max_charge(bat_name: str) -> int:
-    return int(Path(f"{PSEUDO_FS_PATH}{bat_name}/{MAX_CHARGE_FILENAME}").open().read().strip())
+    get_max_charge = Path(f"{PSEUDO_FS_PATH}{bat_name}/{MAX_CHARGE_FILENAME}")
+    if get_max_charge.exists() == False:
+        return 0
+    return int(get_max_charge.open().read().strip())
 
 
 def get_power_draw(bat_name: str) -> int:
-    return int(Path(f"{PSEUDO_FS_PATH}{bat_name}/{POWER_DRAW_FILENAME}").open().read().strip())
+    get_power_draw = Path(f"{PSEUDO_FS_PATH}{bat_name}/{POWER_DRAW_FILENAME}")
+    if get_power_draw.exists() == False:
+        return 0
+    return int(get_power_draw.open().read().strip())
 
 
 def calc_time(batteries: list, status: Status) -> int:
@@ -143,6 +152,10 @@ def calc_time(batteries: list, status: Status) -> int:
 def calc_percentage(batteries: list) -> float:
     total_max_charge = sum([bat.max_charge for bat in batteries])
     total_current_charge = sum([bat.current_charge for bat in batteries])
+    
+    if total_current_charge == 0:
+        return 0
+
     return total_current_charge / total_max_charge
 
 
