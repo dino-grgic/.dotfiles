@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-cp -r ~/.config/nvim ~/.dotfiles/nvim
-cp -r ~/.config/i3 ~/.dotfiles/i3
-cp -r ~/.config/i3blocks ~/.dotfiles/i3blocks
-cp -r ~/.config/tmux ~/.dotfiles/tmux
-cp -r ~/.config/scripts ~/.dotfiles/scripts
-cp -r ~/.config/kittyy ~/.dotfiles/kitty
+cp -r ~/.config/nvim ~/.config/i3 ~/.config/i3blocks ~/.config/tmux ~/.config/scripts ~/.config/kitty ~/.dotfiles/
+
+cd ~/.dotfiles
+git add .
+git commit -m "Updated dotfiles"
+git push -u origin
