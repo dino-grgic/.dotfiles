@@ -1,0 +1,96 @@
+#!/bin/bash
+# Unified dotfiles sync script
+# Usage: dotfiles push|pull|status
+
+set -e
+
+DOTFILES_DIR="$HOME/.dotfiles"
+CONFIG_DIR="$HOME/.config"
+
+# Configs that live in ~/.config/
+CONFIG_ITEMS=(nvim i3 i3blocks tmux scripts kitty)
+
+# Configs that live in ~/
+HOME_ITEMS=(.zshrc .bashrc)
+
+usage() {
+    echo "Usage: dotfiles <command>"
+    echo ""
+    echo "Commands:"
+    echo "  push    Copy configs to dotfiles repo and push to git"
+    echo "  pull    Pull from git and copy configs to system"
+    echo "  status  Show git status of dotfiles repo"
+    exit 1
+}
+
+push_dotfiles() {
+    echo "==> Copying configs to dotfiles repo..."
+    
+    # Copy ~/.config/* items
+    for item in "${CONFIG_ITEMS[@]}"; do
+        if [ -e "$CONFIG_DIR/$item" ]; then
+            echo "  Copying $CONFIG_DIR/$item"
+            cp -r "$CONFIG_DIR/$item" "$DOTFILES_DIR/"
+        fi
+    done
+    
+    # Copy ~/* items (like .zshrc)
+    for item in "${HOME_ITEMS[@]}"; do
+        if [ -e "$HOME/$item" ]; then
+            echo "  Copying $HOME/$item"
+            cp "$HOME/$item" "$DOTFILES_DIR/"
+        fi
+    done
+    
+    echo "==> Pushing to git..."
+    cd "$DOTFILES_DIR"
+    git add .
+    git status --short
+    
+    read -p "Commit message [Updated dotfiles]: " msg
+    msg="${msg:-Updated dotfiles}"
+    
+    git commit -m "$msg"
+    git push -u origin
+    
+    echo "==> Done!"
+}
+
+pull_dotfiles() {
+    echo "==> Pulling from git..."
+    cd "$DOTFILES_DIR"
+    git pull
+    
+    echo "==> Copying configs to system..."
+    
+    # Copy ~/.config/* items
+    for item in "${CONFIG_ITEMS[@]}"; do
+        if [ -e "$DOTFILES_DIR/$item" ]; then
+            echo "  Copying $item to $CONFIG_DIR/"
+            cp -r "$DOTFILES_DIR/$item" "$CONFIG_DIR/"
+        fi
+    done
+    
+    # Copy ~/* items (like .zshrc)
+    for item in "${HOME_ITEMS[@]}"; do
+        if [ -e "$DOTFILES_DIR/$item" ]; then
+            echo "  Copying $item to $HOME/"
+            cp "$DOTFILES_DIR/$item" "$HOME/"
+        fi
+    done
+    
+    echo "==> Done! You may need to reload i3 (mod+Shift+r) or restart your shell."
+}
+
+show_status() {
+    cd "$DOTFILES_DIR"
+    echo "==> Dotfiles repo status:"
+    git status
+}
+
+case "${1:-}" in
+    push)   push_dotfiles ;;
+    pull)   pull_dotfiles ;;
+    status) show_status ;;
+    *)      usage ;;
+esac

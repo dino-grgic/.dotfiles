@@ -1,0 +1,58 @@
+#!/bin/bash
+# Install script for dotfiles dependencies
+# Supports: Debian/Ubuntu (apt), Arch (pacman), Fedora (dnf)
+
+set -e
+
+echo "==> Detecting package manager..."
+
+if command -v apt &>/dev/null; then
+    PM="apt"
+    INSTALL="sudo apt update && sudo apt install -y"
+    PACKAGES="i3 i3blocks zsh rofi kitty tmux neovim fzf ripgrep"
+elif command -v pacman &>/dev/null; then
+    PM="pacman"
+    INSTALL="sudo pacman -Syu --noconfirm"
+    PACKAGES="i3-wm i3blocks zsh rofi kitty tmux neovim fzf ripgrep"
+elif command -v dnf &>/dev/null; then
+    PM="dnf"
+    INSTALL="sudo dnf install -y"
+    PACKAGES="i3 i3blocks zsh rofi kitty tmux neovim fzf ripgrep"
+else
+    echo "Error: No supported package manager found (apt, pacman, dnf)"
+    exit 1
+fi
+
+echo "==> Using $PM"
+echo "==> Installing: $PACKAGES"
+echo ""
+
+eval "$INSTALL $PACKAGES"
+
+# Install Oh My Zsh if not present
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "==> Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# Set zsh as default shell
+if [ "$SHELL" != "$(which zsh)" ]; then
+    echo "==> Setting zsh as default shell..."
+    chsh -s "$(which zsh)"
+    echo "    You'll need to log out and back in for this to take effect."
+fi
+
+# Copy dotfiles to system
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
+
+echo "==> Installing dotfiles from $DOTFILES_DIR..."
+"$SCRIPT_DIR/dotfiles" pull
+
+echo ""
+echo "==> Installation complete!"
+echo ""
+echo "Next steps:"
+echo "  1. Log out and back in (for zsh to take effect)"
+echo "  2. Reload i3 with mod+Shift+r"
+echo "  3. Run 'dotfiles status' to check your dotfiles"
