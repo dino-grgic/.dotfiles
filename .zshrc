@@ -105,3 +105,6 @@ source $ZSH/oh-my-zsh.sh
 
 # opencode
 export PATH=/home/dgrgic/.opencode/bin:$PATH
+
+# Custom scripts
+export PATH="$HOME/.config/scripts:$PATH"

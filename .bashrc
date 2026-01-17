@@ -115,3 +115,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# Custom scripts
+export PATH="$HOME/.config/scripts:$PATH"

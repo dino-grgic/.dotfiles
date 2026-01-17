@@ -8,10 +8,10 @@ DOTFILES_DIR="$HOME/.dotfiles"
 CONFIG_DIR="$HOME/.config"
 
 # Configs that live in ~/.config/
-CONFIG_ITEMS=(nvim i3 i3blocks tmux scripts kitty)
+CONFIG_ITEMS=(nvim i3 i3blocks tmux scripts kitty dunst rofi)
 
 # Configs that live in ~/
-HOME_ITEMS=(.zshrc .bashrc)
+HOME_ITEMS=(.zshrc .bashrc .screenlayout)
 
 usage() {
     echo "Usage: dotfiles <command>"
@@ -34,11 +34,11 @@ push_dotfiles() {
         fi
     done
     
-    # Copy ~/* items (like .zshrc)
+    # Copy ~/* items (like .zshrc, .screenlayout)
     for item in "${HOME_ITEMS[@]}"; do
         if [ -e "$HOME/$item" ]; then
             echo "  Copying $HOME/$item"
-            cp "$HOME/$item" "$DOTFILES_DIR/"
+            cp -r "$HOME/$item" "$DOTFILES_DIR/"
         fi
     done
     
@@ -63,6 +63,9 @@ pull_dotfiles() {
     
     echo "==> Copying configs to system..."
     
+    # Ensure ~/.config exists
+    mkdir -p "$CONFIG_DIR"
+    
     # Copy ~/.config/* items
     for item in "${CONFIG_ITEMS[@]}"; do
         if [ -e "$DOTFILES_DIR/$item" ]; then
@@ -71,13 +74,18 @@ pull_dotfiles() {
         fi
     done
     
-    # Copy ~/* items (like .zshrc)
+    # Copy ~/* items (like .zshrc, .screenlayout)
     for item in "${HOME_ITEMS[@]}"; do
         if [ -e "$DOTFILES_DIR/$item" ]; then
             echo "  Copying $item to $HOME/"
-            cp "$DOTFILES_DIR/$item" "$HOME/"
+            cp -r "$DOTFILES_DIR/$item" "$HOME/"
         fi
     done
+    
+    # Make scripts executable
+    chmod +x "$CONFIG_DIR/scripts/"* 2>/dev/null || true
+    chmod +x "$CONFIG_DIR/i3blocks/scripts/"* 2>/dev/null || true
+    chmod +x "$HOME/.screenlayout/"* 2>/dev/null || true
     
     echo "==> Done! You may need to reload i3 (mod+Shift+r) or restart your shell."
 }
