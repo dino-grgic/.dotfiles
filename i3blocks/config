@@ -54,5 +54,5 @@ color=#A4C2F4
 
 # Update time every second
 [time]
-command=date +"%x %T"
+command=date +"%d/%m/%Y %T"
 interval=1
