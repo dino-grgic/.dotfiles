@@ -108,3 +108,6 @@ export PATH=/home/dgrgic/.opencode/bin:$PATH
 
 # Custom scripts
 export PATH="$HOME/.config/scripts:$PATH"
+
+# Created by `pipx` on 2026-01-19 07:58:05
+export PATH="$PATH:/home/dgrgic/.local/bin"
