@@ -24,7 +24,25 @@ usage() {
 }
 
 push_dotfiles() {
-    echo "==> Copying configs to dotfiles repo..."
+    echo "==> Removing old configs from dotfiles repo to prevent dead files..."
+    
+    # Delete ~/.config/* items from dotfiles repo
+    for item in "${CONFIG_ITEMS[@]}"; do
+        if [ -e "$DOTFILES_DIR/$item" ]; then
+            echo "  Removing $DOTFILES_DIR/$item"
+            rm -rf "$DOTFILES_DIR/$item"
+        fi
+    done
+    
+    # Delete ~/* items from dotfiles repo
+    for item in "${HOME_ITEMS[@]}"; do
+        if [ -e "$DOTFILES_DIR/$item" ]; then
+            echo "  Removing $DOTFILES_DIR/$item"
+            rm -rf "$DOTFILES_DIR/$item"
+        fi
+    done
+    
+    echo "==> Copying fresh configs to dotfiles repo..."
     
     # Copy ~/.config/* items
     for item in "${CONFIG_ITEMS[@]}"; do
