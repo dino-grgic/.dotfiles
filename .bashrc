@@ -118,3 +118,11 @@ fi
 
 # Custom scripts
 export PATH="$HOME/.config/scripts:$PATH"
+
+# i3blocks work mode toggle (0=personal, 1=work)
+export WORK_MODE=1
+
+# i3blocks work mode toggle aliases
+alias work-mode='export WORK_MODE=1 && i3-msg restart'
+alias personal-mode='export WORK_MODE=0 && i3-msg restart'
+alias check-mode='[ "$WORK_MODE" = "1" ] && echo "Work mode" || echo "Personal mode"'

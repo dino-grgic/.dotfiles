@@ -111,3 +111,8 @@ export PATH="$HOME/.config/scripts:$PATH"
 
 # Created by `pipx` on 2026-01-19 07:58:05
 export PATH="$PATH:/home/dgrgic/.local/bin"
+
+export WORK_MODE=1
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"

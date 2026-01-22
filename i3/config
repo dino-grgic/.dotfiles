@@ -211,7 +211,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
 	position top
-	status_command SCRIPT_DIR=~/.config/i3blocks/scripts i3blocks
+	status_command SCRIPT_DIR=~/.config/i3blocks/scripts ~/.config/i3blocks/i3blocks-wrapper.sh
 	colors {
 		focused_workspace  #77dd77 #285577 #ffffff
 			background         #000000

@@ -187,6 +187,65 @@ if ! grep -qF '.config/scripts' "$HOME/.bashrc" 2>/dev/null; then
     echo "$SCRIPT_PATH_LINE" >> "$HOME/.bashrc"
 fi
 
+# Setup WORK_MODE environment variable
+echo "==> Setting up WORK_MODE environment variable..."
+
+BASHRC_FILE="$HOME/.bashrc"
+ZSHRC_FILE="$HOME/.zshrc"
+PROFILE_FILE="$HOME/.profile"
+
+# Check which shell config file to use
+if [ -f "$ZSHRC_FILE" ]; then
+    SHELL_CONFIG="$ZSHRC_FILE"
+    echo "    Detected zsh, using $ZSHRC_FILE"
+elif [ -f "$BASHRC_FILE" ]; then
+    SHELL_CONFIG="$BASHRC_FILE"
+    echo "    Detected bash, using $BASHRC_FILE"
+else
+    echo "    Warning: No shell config file found, creating ~/.bashrc"
+    touch "$BASHRC_FILE"
+    SHELL_CONFIG="$BASHRC_FILE"
+fi
+
+# Check if WORK_MODE is already defined
+if grep -q "export WORK_MODE" "$SHELL_CONFIG"; then
+    echo "    WORK_MODE already defined in $SHELL_CONFIG"
+else
+    echo "" >> "$SHELL_CONFIG"
+    echo "# i3blocks work mode toggle (0=personal, 1=work)" >> "$SHELL_CONFIG"
+    echo "export WORK_MODE=0" >> "$SHELL_CONFIG"
+    echo "    Added WORK_MODE=0 to $SHELL_CONFIG"
+fi
+
+# Add to .profile if it exists (for display managers)
+if [ -f "$PROFILE_FILE" ]; then
+    if grep -q "export WORK_MODE" "$PROFILE_FILE"; then
+        echo "    WORK_MODE already defined in $PROFILE_FILE"
+    else
+        echo "" >> "$PROFILE_FILE"
+        echo "# i3blocks work mode toggle (0=personal, 1=work)" >> "$PROFILE_FILE"
+        echo "export WORK_MODE=0" >> "$PROFILE_FILE"
+        echo "    Added WORK_MODE=0 to $PROFILE_FILE"
+    fi
+fi
+
+# Create convenience aliases
+echo "==> Adding work mode toggle aliases..."
+
+ALIAS_BLOCK="
+# i3blocks work mode toggle aliases
+alias work-mode='export WORK_MODE=1 && i3-msg restart'
+alias personal-mode='export WORK_MODE=0 && i3-msg restart'
+alias check-mode='[ \"\$WORK_MODE\" = \"1\" ] && echo \"Work mode\" || echo \"Personal mode\"'
+"
+
+if ! grep -q "alias work-mode" "$SHELL_CONFIG"; then
+    echo "$ALIAS_BLOCK" >> "$SHELL_CONFIG"
+    echo "    Added mode toggle aliases to $SHELL_CONFIG"
+else
+    echo "    Aliases already exist in $SHELL_CONFIG"
+fi
+
 # Copy dotfiles to system
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DOTFILES_DIR="$(dirname "$SCRIPT_DIR")"
@@ -204,6 +263,12 @@ echo "  - Editor: neovim"
 echo "  - CLI tools: fzf, ripgrep, xdotool"
 echo "  - Tray: nm-applet, blueman, pasystray"
 echo "  - Utils: flameshot, brightnessctl, xclip, arandr"
+echo "  - Work mode: WORK_MODE=0 (personal mode by default)"
+echo ""
+echo "Work mode commands:"
+echo "  work-mode       - Switch to work mode (hides music player)"
+echo "  personal-mode   - Switch to personal mode (shows music player)"
+echo "  check-mode      - Check current mode"
 echo ""
 echo "Next steps:"
 echo "  1. Log out and back in (for zsh to take effect)"

@@ -105,17 +105,17 @@ package.preload['nvim-treesitter.configs'] = function()
     is_enabled = function(mod, lang, bufnr)
       -- Get the stored config (set during treesitter setup)
       local mod_config = ts_config_store[mod]
-      
+
       if not mod_config then
         -- Default to true for highlight module if not explicitly configured
         return mod == 'highlight'
       end
-      
+
       -- Check if module is explicitly disabled
       if mod_config.enable == false then
         return false
       end
-      
+
       -- Check if language is in disable list
       if mod_config.disable then
         if type(mod_config.disable) == 'function' then
@@ -124,14 +124,14 @@ package.preload['nvim-treesitter.configs'] = function()
           return not vim.tbl_contains(mod_config.disable, lang)
         end
       end
-      
+
       return mod_config.enable ~= false
     end,
-    
+
     get_module = function(mod)
       return ts_config_store[mod]
     end,
-    
+
     -- Add setup function to capture config
     setup = function(config)
       -- Store the modules for later use
@@ -148,7 +148,7 @@ end
 local original_require = require
 _G.require = function(module)
   local result = original_require(module)
-  
+
   -- Patch parsers module for ft_to_lang compatibility
   if module == 'nvim-treesitter.parsers' then
     if not result.ft_to_lang then
@@ -157,7 +157,7 @@ _G.require = function(module)
       end
     end
   end
-  
+
   return result
 end
 
@@ -170,7 +170,7 @@ end
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -253,10 +253,10 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -1012,7 +1012,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'python', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
