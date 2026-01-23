@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+set -e
+
+# List of packages to stow (comma-separated for easy editing)
+STOW_FOLDERS="nvim,i3,i3blocks,kitty,dunst,rofi,tmux,zsh,bin,screenlayout"
+
+DOTFILES="$HOME/.dotfiles"
+
+echo "==> Installing dotfiles with GNU Stow..."
+
+pushd "$DOTFILES" > /dev/null
+
+# Convert comma-separated list to space-separated for iteration
+for folder in $(echo "$STOW_FOLDERS" | sed "s/,/ /g"); do
+    if [ -d "$folder" ]; then
+        echo "  Stowing $folder..."
+        # -D removes existing symlinks, then stow creates fresh ones
+        stow -D "$folder" 2>/dev/null || true
+        stow "$folder"
+    else
+        echo "  Skipping $folder (not found)"
+    fi
+done
+
+popd > /dev/null
+
+echo ""
+echo "==> Making scripts executable..."
+[ -d "$HOME/.local/scripts" ] && chmod +x "$HOME/.local/scripts/"* 2>/dev/null || true
+[ -d "$HOME/.config/i3blocks/scripts" ] && chmod +x "$HOME/.config/i3blocks/scripts/"* 2>/dev/null || true
+[ -d "$HOME/.screenlayout" ] && chmod +x "$HOME/.screenlayout/"*.sh 2>/dev/null || true
+
+echo ""
+echo "==> Done! Dotfiles installed."
+echo ""
+echo "You may need to:"
+echo "  - Reload i3: mod+Shift+r"
+echo "  - Restart your shell: exec zsh"
