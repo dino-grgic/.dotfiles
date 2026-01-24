@@ -116,3 +116,31 @@ export WORK_MODE=1
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# =============================================================================
+# Universal Clipboard (works on Linux X11/Wayland and macOS)
+# =============================================================================
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS - use native pbcopy/pbpaste
+    alias clip="pbcopy"
+    alias paste="pbpaste"
+elif [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+    # Wayland - use wl-clipboard
+    alias clip="wl-copy"
+    alias paste="wl-paste"
+else
+    # X11 - use xclip (most compatible with nvim/flameshot)
+    alias clip="xclip -selection clipboard"
+    alias paste="xclip -selection clipboard -o"
+fi
+
+# Clipboard provider for Neovim (ensures correct tool is used)
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+        export CLIPBOARD_COPY="wl-copy"
+        export CLIPBOARD_PASTE="wl-paste"
+    else
+        export CLIPBOARD_COPY="xclip -selection clipboard"
+        export CLIPBOARD_PASTE="xclip -selection clipboard -o"
+    fi
+fi
