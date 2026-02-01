@@ -1,10 +1,7 @@
 [global]
     monitor = 0
     follow = mouse
-    width = 300
-    height = 300
-    origin = top-right
-    offset = 10x50
+    geometry = "300x5-10+50"
     scale = 0
     notification_limit = 0
     
