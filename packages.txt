@@ -1,0 +1,48 @@
+# Core system packages
+# Lines starting with # are comments
+# Add packages one per line
+
+# Window manager & desktop
+i3
+i3blocks
+i3lock
+rofi
+dunst
+feh
+picom
+
+# Terminal & shell
+kitty
+zsh
+tmux
+stow
+
+# Clipboard
+xclip
+clipmenu
+
+# Screenshot & display
+flameshot
+arandr
+brightnessctl
+
+# Editor
+neovim
+
+# Development tools
+git
+curl
+wget
+ripgrep
+fd-find
+fzf
+jq
+
+# System utilities
+htop
+network-manager
+blueman
+
+# Fonts (Debian package names)
+fonts-jetbrains-mono
+fonts-font-awesome
