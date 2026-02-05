@@ -52,6 +52,12 @@ command=curl https://wttr.in/Zagreb?format=3
 interval=3600
 color=#A4C2F4
 
+[keyboard]
+command=$SCRIPT_DIR/keyboard
+label=KB
+interval=1
+signal=11
+
 # Update time every second
 [time]
 command=date +"%d/%m/%Y %T"

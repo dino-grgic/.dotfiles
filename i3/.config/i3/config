@@ -34,7 +34,10 @@ exec --no-startup-id dust
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
-exec --no-startup-id setxkbmap -layout us,hr -option grp:alt_space_toggle
+exec --no-startup-id setxkbmap -layout us,hr
+
+# Keyboard layout toggle with i3blocks refresh
+bindsym Mod4+space exec --no-startup-id ~/.config/i3blocks/scripts/toggle-keyboard
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.

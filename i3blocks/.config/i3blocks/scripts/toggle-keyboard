@@ -1,0 +1,8 @@
+#!/bin/bash
+current=$(setxkbmap -query | grep layout | awk '{print $2}')
+if [[ "$current" == "us,hr" ]]; then
+    setxkbmap -layout hr,us -option grp:win_space_toggle
+else
+    setxkbmap -layout us,hr -option grp:win_space_toggle
+fi
+pkill -RTMIN+11 i3blocks

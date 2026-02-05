@@ -1,0 +1,3 @@
+#!/bin/bash
+layout=$(setxkbmap -query | grep layout | awk '{print $2}' | cut -d',' -f$(($(xset -q | grep -oP 'LED mask:\s+\K\d+') / 4096 + 1)))
+echo "${layout^^}"
