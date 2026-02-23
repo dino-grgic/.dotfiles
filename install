@@ -56,6 +56,27 @@ get_packages() {
     fi
 }
 
+install_nerd_font() {
+    local font_dir="$HOME/.local/share/fonts"
+    local font_name="JetBrainsMono"
+    
+    if fc-list | grep -qi "JetBrainsMono Nerd Font"; then
+        info "JetBrains Mono Nerd Font already installed"
+        return 0
+    fi
+    
+    info "Installing JetBrains Mono Nerd Font..."
+    mkdir -p "$font_dir"
+    cd "$font_dir"
+    
+    wget -q --show-progress "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/${font_name}.zip" -O "${font_name}.zip"
+    unzip -o "${font_name}.zip" -d "$font_name"
+    rm "${font_name}.zip"
+    
+    fc-cache -fv
+    info "JetBrains Mono Nerd Font installed!"
+}
+
 install_packages() {
     local pkg_manager=$(detect_pkg_manager)
     local packages=$(get_packages)
@@ -88,6 +109,9 @@ install_packages() {
             exit 1
             ;;
     esac
+    
+    # Install Nerd Font (not in standard repos)
+    install_nerd_font
     
     info "Packages installed!"
 }
@@ -123,6 +147,7 @@ post_install() {
     echo "  - Change shell to zsh: chsh -s \$(which zsh)"
     echo "  - Reload i3: mod+Shift+r"
     echo "  - Restart your shell: exec zsh"
+    echo "  - Font used: JetBrains Mono Nerd Font (includes icons)"
 }
 
 # Default action

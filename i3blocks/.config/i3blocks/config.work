@@ -1,19 +1,19 @@
 [backlight]
 command=$SCRIPT_DIR/backlight
-label=BRT
+label=󰃠 
 interval=1
 signal=10
 
 [volume]
 command=$SCRIPT_DIR/volume
-label=VOL
+label=󰕾 
 interval=1
 signal=10
 
 [cpu_usage]
 command=$SCRIPT_DIR/cpu_usage
 interval=10
-label=CPU
+label=󰻠 
 #min_width=CPU: 100.00%
 #T_WARN=50
 #T_CRIT=80
@@ -24,13 +24,13 @@ label=CPU
 
 [battery]
 command=$SCRIPT_DIR/battery_poly
-label=BAT
+label=󰁹 
 interval=30
 signal=10
 
 [temperature]
 command=$SCRIPT_DIR/temperature
-label=TEMP
+label=󰔏 
 interval=10
 #T_WARN=70
 #T_CRIT=90
@@ -38,13 +38,24 @@ interval=10
 
 [memory]
 command=$SCRIPT_DIR/memory
-label=MEM
+label=󰍛 
 interval=30
 
 [weather]
 command=curl https://wttr.in/Zagreb?format=3
 interval=3600
 color=#A4C2F4
+
+[pomo]
+command=pomo status || echo "󰔟 --:--"
+interval=1
+signal=12
+
+[keyboard]
+command=$SCRIPT_DIR/keyboard
+label=󰌌 
+interval=1
+signal=11
 
 # Update time every second
 [time]
