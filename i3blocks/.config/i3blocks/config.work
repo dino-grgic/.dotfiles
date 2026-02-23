@@ -1,19 +1,19 @@
 [backlight]
 command=$SCRIPT_DIR/backlight
-label=󰃠 
+label=󰃠
 interval=1
 signal=10
 
 [volume]
 command=$SCRIPT_DIR/volume
-label=󰕾 
+label=󰕾
 interval=1
 signal=10
 
 [cpu_usage]
 command=$SCRIPT_DIR/cpu_usage
 interval=10
-label=󰻠 
+label=󰻠
 #min_width=CPU: 100.00%
 #T_WARN=50
 #T_CRIT=80
@@ -24,13 +24,13 @@ label=󰻠
 
 [battery]
 command=$SCRIPT_DIR/battery_poly
-label=󰁹 
+label=󰁹
 interval=30
 signal=10
 
 [temperature]
 command=$SCRIPT_DIR/temperature
-label=󰔏 
+label=󰔏
 interval=10
 #T_WARN=70
 #T_CRIT=90
@@ -38,7 +38,7 @@ interval=10
 
 [memory]
 command=$SCRIPT_DIR/memory
-label=󰍛 
+label=󰍛
 interval=30
 
 [weather]
@@ -53,7 +53,7 @@ signal=12
 
 [keyboard]
 command=$SCRIPT_DIR/keyboard
-label=󰌌 
+label=󰌌
 interval=1
 signal=11
 
