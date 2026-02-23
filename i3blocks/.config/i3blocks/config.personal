@@ -53,7 +53,7 @@ interval=3600
 color=#A4C2F4
 
 [pomo]
-command=pomo status || echo "󰔟 --:--"
+command=pomodoro status
 interval=1
 signal=12
 

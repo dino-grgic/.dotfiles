@@ -77,6 +77,31 @@ install_nerd_font() {
     info "JetBrains Mono Nerd Font installed!"
 }
 
+install_xkb_switch() {
+    if command -v xkb-switch &>/dev/null; then
+        info "xkb-switch already installed"
+        return 0
+    fi
+    
+    info "Installing xkb-switch..."
+    local src_dir="$HOME/src"
+    mkdir -p "$src_dir"
+    cd "$src_dir"
+    
+    if [ ! -d "xkb-switch" ]; then
+        git clone https://github.com/grwlf/xkb-switch.git
+    fi
+    
+    cd xkb-switch
+    mkdir -p build && cd build
+    cmake ..
+    make
+    sudo make install
+    sudo ldconfig
+    
+    info "xkb-switch installed!"
+}
+
 install_packages() {
     local pkg_manager=$(detect_pkg_manager)
     local packages=$(get_packages)
@@ -112,6 +137,9 @@ install_packages() {
     
     # Install Nerd Font (not in standard repos)
     install_nerd_font
+    
+    # Install xkb-switch (not in Ubuntu repos)
+    install_xkb_switch
     
     info "Packages installed!"
 }

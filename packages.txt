@@ -37,6 +37,11 @@ ripgrep
 fd-find
 fzf
 jq
+build-essential
+cmake
+
+# Build dependencies (for xkb-switch)
+libxkbfile-dev
 
 # System utilities
 htop

@@ -1,3 +1,14 @@
 #!/bin/bash
-layout=$(setxkbmap -query | grep layout | awk '{print $2}' | cut -d',' -f$(($(xset -q | grep -oP 'LED mask:\s+\K\d+') / 4096 + 1)))
-echo "${layout^^}"
+# Get current keyboard layout
+if command -v xkb-switch &>/dev/null; then
+    xkb-switch -p | tr '[:lower:]' '[:upper:]'
+else
+    # Fallback
+    layouts=$(setxkbmap -query | awk '/layout/{print $2}')
+    IFS=',' read -ra LAYOUTS <<< "$layouts"
+    if xset -q | grep -q "Group 2:.*on"; then
+        echo "${LAYOUTS[1]^^}"
+    else
+        echo "${LAYOUTS[0]^^}"
+    fi
+fi
