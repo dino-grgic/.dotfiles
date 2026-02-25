@@ -1,0 +1,69 @@
+#!/bin/bash
+# Simple pomodoro timer for i3blocks
+
+POMO_FILE="/tmp/pomodoro_end"
+POMO_TYPE="/tmp/pomodoro_type"
+SOUND="/usr/share/sounds/freedesktop/stereo/alarm-clock-elapsed.oga"
+
+start_timer() {
+    local minutes=$1
+    local type=$2
+    echo $(($(date +%s) + minutes * 60)) > "$POMO_FILE"
+    echo "$type" > "$POMO_TYPE"
+    notify-send "Pomodoro" "Started $type ($minutes min)"
+}
+
+add_time() {
+    local minutes=$1
+    if [[ -f "$POMO_FILE" ]]; then
+        local current=$(cat "$POMO_FILE")
+        echo $((current + minutes * 60)) > "$POMO_FILE"
+    fi
+}
+
+case "$1" in
+    work)
+        start_timer ${2:-25} "WORK"
+        ;;
+    break)
+        start_timer ${2:-5} "BREAK"
+        ;;
+    long)
+        start_timer ${2:-15} "LONG BREAK"
+        ;;
+    add)
+        add_time ${2:-5}
+        ;;
+    stop)
+        rm -f "$POMO_FILE" "$POMO_TYPE"
+        notify-send "Pomodoro" "Timer stopped"
+        ;;
+    status)
+        if [[ -f "$POMO_FILE" ]]; then
+            END=$(cat "$POMO_FILE")
+            NOW=$(date +%s)
+            REMAINING=$((END - NOW))
+            TYPE=$(cat "$POMO_TYPE" 2>/dev/null || echo "WORK")
+            
+            if [[ $REMAINING -gt 0 ]]; then
+                case $TYPE in
+                    WORK)       ICON="󰔟" ;;
+                    BREAK)      ICON="󰒲" ;;
+                    "LONG BREAK") ICON="󰒲" ;;
+                    *)          ICON="󰔟" ;;
+                esac
+                printf "%s %02d:%02d\n" "$ICON" $((REMAINING/60)) $((REMAINING%60))
+            else
+                rm -f "$POMO_FILE" "$POMO_TYPE"
+                notify-send -u critical "Pomodoro" "$TYPE complete!"
+                paplay "$SOUND" &
+                echo "󰔟 --:--"
+            fi
+        else
+            echo "󰔟 --:--"
+        fi
+        ;;
+    *)
+        echo "Usage: pomodoro {work|break|long|add|stop|status} [minutes]"
+        ;;
+esac

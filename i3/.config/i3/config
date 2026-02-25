@@ -70,11 +70,11 @@ bindsym Control+Shift+space exec --no-startup-id dunstctl close-all
 bindsym Control+grave exec --no-startup-id dunstctl history-pop
 
 # Pomodoro controls
-bindsym $mod+p exec --no-startup-id pomodoro work && pkill -RTMIN+12 i3blocks
-bindsym $mod+Shift+p exec --no-startup-id pomodoro break && pkill -RTMIN+12 i3blocks
-bindsym $mod+Ctrl+p exec --no-startup-id pomodoro stop && pkill -RTMIN+12 i3blocks
-bindsym $mod+plus exec --no-startup-id pomodoro add 5 && pkill -RTMIN+12 i3blocks
-bindsym $mod+minus exec --no-startup-id pomodoro add -5 && pkill -RTMIN+12 i3blocks
+bindsym $mod+p exec --no-startup-id ~/.config/i3blocks/scripts/pomodoro work && pkill -RTMIN+12 i3blocks
+bindsym $mod+Shift+p exec --no-startup-id ~/.config/i3blocks/scripts/pomodoro break && pkill -RTMIN+12 i3blocks
+bindsym $mod+Ctrl+p exec --no-startup-id ~/.config/i3blocks/scripts/pomodoro stop && pkill -RTMIN+12 i3blocks
+bindsym $mod+plus exec --no-startup-id ~/.config/i3blocks/scripts/pomodoro add 5 && pkill -RTMIN+12 i3blocks
+bindsym $mod+minus exec --no-startup-id ~/.config/i3blocks/scripts/pomodoro add -5 && pkill -RTMIN+12 i3blocks
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod

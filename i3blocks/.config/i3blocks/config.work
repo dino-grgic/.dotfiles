@@ -41,13 +41,18 @@ command=$SCRIPT_DIR/memory
 label=󰍛
 interval=30
 
+[disk]
+command=df -h / | awk 'NR==2 {print $4}'
+label=󰋊
+interval=60
+
 [weather]
 command=curl https://wttr.in/Zagreb?format=3
 interval=3600
 color=#A4C2F4
 
 [pomo]
-command=pomodoro status
+command=$SCRIPT_DIR/pomodoro status
 interval=1
 signal=12
 
