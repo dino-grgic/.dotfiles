@@ -163,10 +163,19 @@ stow_dotfiles() {
     
     info "Making scripts executable..."
     [ -d "$HOME/.local/scripts" ] && chmod +x "$HOME/.local/scripts/"* 2>/dev/null || true
+    [ -d "$HOME/.local/bin" ] && chmod +x "$HOME/.local/bin/"* 2>/dev/null || true
     [ -d "$HOME/.config/i3blocks/scripts" ] && chmod +x "$HOME/.config/i3blocks/scripts/"* 2>/dev/null || true
     [ -d "$HOME/.screenlayout" ] && chmod +x "$HOME/.screenlayout/"*.sh 2>/dev/null || true
     
     info "Dotfiles stowed!"
+}
+
+enable_services() {
+    info "Enabling systemd user services..."
+    systemctl --user daemon-reload
+    systemctl --user enable --now power-profile-auto.timer && \
+        info "power-profile-auto.timer enabled" || \
+        warn "Failed to enable power-profile-auto.timer"
 }
 
 post_install() {
@@ -218,6 +227,7 @@ case $ACTION in
         install_packages
         echo ""
         stow_dotfiles
+        enable_services
         post_install
         ;;
     packages)
@@ -225,6 +235,7 @@ case $ACTION in
         ;;
     stow)
         stow_dotfiles
+        enable_services
         post_install
         ;;
     list)

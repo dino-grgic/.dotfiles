@@ -4,16 +4,22 @@ instance=spotify
 interval=5
 signal=10
 
+[volume]
+command=$SCRIPT_DIR/volume
+label=󰕾
+interval=1
+signal=10
+
 [backlight]
 command=$SCRIPT_DIR/backlight
 label=󰃠
 interval=1
 signal=10
 
-[volume]
-command=$SCRIPT_DIR/volume
-label=󰕾
-interval=1
+[battery]
+command=$SCRIPT_DIR/battery_poly
+label=󰁹
+interval=30
 signal=10
 
 [cpu_usage]
@@ -27,12 +33,6 @@ label=󰻠
 #COLOR_NORMAL=#EBDBB2
 #COLOR_WARN=#FFFC00
 #COLOR_CRIT=#FF0000
-
-[battery]
-command=$SCRIPT_DIR/battery_poly
-label=󰁹
-interval=30
-signal=10
 
 [temperature]
 command=$SCRIPT_DIR/temperature
@@ -70,5 +70,5 @@ signal=11
 
 # Update time every second
 [time]
-command=date +"%d/%m/%Y %T"
+command=date +"(%a) %d/%m/%Y %T"
 interval=1

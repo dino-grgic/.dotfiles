@@ -43,6 +43,9 @@ bindsym Mod4+space exec --no-startup-id ~/.config/i3blocks/scripts/toggle-keyboa
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+# Auto-toggle power profile on AC/battery
+exec --no-startup-id systemctl --user start power-profile-auto.timer
+
 # Clipboard manager daemon
 exec --no-startup-id clipmenud
 

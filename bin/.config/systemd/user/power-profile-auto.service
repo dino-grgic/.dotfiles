@@ -1,0 +1,6 @@
+[Unit]
+Description=Auto-set power profile based on AC power
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/power-profile-auto

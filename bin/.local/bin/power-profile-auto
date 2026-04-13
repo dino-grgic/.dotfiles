@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+get_ac_online() {
+  for supply in /sys/class/power_supply/*; do
+    if [[ -f "$supply/type" ]] && [[ "$(cat "$supply/type")" == "Mains" ]]; then
+      if [[ -f "$supply/online" ]]; then
+        cat "$supply/online"
+        return 0
+      fi
+    fi
+  done
+
+  return 1
+}
+
+if ! command -v powerprofilesctl >/dev/null 2>&1; then
+  exit 0
+fi
+
+ac_online=$(get_ac_online || echo "")
+
+if [[ "$ac_online" == "1" ]]; then
+  powerprofilesctl set performance
+elif [[ "$ac_online" == "0" ]]; then
+  powerprofilesctl set balanced
+fi

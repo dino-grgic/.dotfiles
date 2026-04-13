@@ -1,0 +1,10 @@
+[Unit]
+Description=Auto-set power profile periodically
+
+[Timer]
+OnBootSec=15s
+OnUnitActiveSec=60s
+Unit=power-profile-auto.service
+
+[Install]
+WantedBy=timers.target

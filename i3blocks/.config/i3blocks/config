@@ -53,7 +53,7 @@ label=󰋊
 interval=60
 
 [weather]
-command=curl https://wttr.in/Zagreb?format=3
+command=curl https://wttr.in/Osijek?format=3
 interval=3600
 color=#A4C2F4
 
@@ -70,5 +70,5 @@ signal=11
 
 # Update time every second
 [time]
-command=date +"%d/%m/%Y %T"
+command=date +"%a, %d/%m/%Y %T"
 interval=1
