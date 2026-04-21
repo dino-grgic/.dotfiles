@@ -18,6 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import re
+import subprocess
 import sys
 from enum import Enum
 from pathlib import Path
@@ -75,7 +76,7 @@ def get_configuration() -> Configuration:
     batteries = []
     for x in Path(PSEUDO_FS_PATH).iterdir():
         bat_name = str(x.parts[len(x.parts) - 1])
-        if re.match("^BAT\d+$", bat_name):
+        if re.match(r"^BAT\d+$", bat_name):
             batteries.append(Battery(
                 get_status(bat_name),
                 get_current_charge(bat_name),
@@ -174,8 +175,24 @@ def calc_display_time(status: Status, seconds: int) -> str:
     return f" ({direction}{hours}:{minutes:02})"
 
 
+POWER_PROFILE_ICONS = {
+    "performance": "\uf0e7",   # nf-fa-bolt
+    "balanced": "\uf042",      # nf-fa-adjust
+    "power-saver": "\uf06c",   # nf-fa-leaf
+}
+
+
+def get_power_profile_icon() -> str:
+    try:
+        profile = subprocess.check_output(["powerprofilesctl", "get"], text=True).strip()
+        return POWER_PROFILE_ICONS.get(profile, "")
+    except Exception:
+        return ""
+
+
 def print_status(config: Configuration):
-    print(f"{config.percentage:{PERCENTAGE_FORMAT}}{calc_display_time(config.status, config.time_to_completion)}")
+    profile_icon = get_power_profile_icon()
+    print(f"{config.percentage:{PERCENTAGE_FORMAT}}{calc_display_time(config.status, config.time_to_completion)} {profile_icon}")
 
 
 def main():

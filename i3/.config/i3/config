@@ -26,6 +26,10 @@ for_window [class="^.*"] border pixel 2
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
 
+# Force dark themes in apps
+exec --no-startup-id gsettings set org.gnome.desktop.interface color-scheme prefer-dark
+exec --no-startup-id gsettings set org.gnome.desktop.interface gtk-theme Adwaita-dark
+
 exec --no-startup-id dust
 
 # The combination of xss-lock, nm-applet and pactl is a popular choice, so
