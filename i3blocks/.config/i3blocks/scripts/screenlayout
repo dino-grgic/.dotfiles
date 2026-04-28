@@ -1,0 +1,74 @@
+#!/bin/bash
+
+LAYOUT_DIR="$HOME/.screenlayout"
+STATE_FILE="$LAYOUT_DIR/.current"
+LABEL="󰍺"
+
+mapfile -t LAYOUTS < <(ls "$LAYOUT_DIR"/*.sh 2>/dev/null | sort)
+
+get_name() {
+    basename "$1" .sh
+}
+
+get_current() {
+    if [[ -f "$STATE_FILE" && -f "$(cat "$STATE_FILE")" ]]; then
+        cat "$STATE_FILE"
+    elif [[ ${#LAYOUTS[@]} -gt 0 ]]; then
+        echo "${LAYOUTS[0]}"
+    fi
+}
+
+apply_layout() {
+    bash "$1"
+    echo "$1" > "$STATE_FILE"
+    pkill -RTMIN+13 i3blocks
+}
+
+case "$BLOCK_BUTTON" in
+    1)
+        names=()
+        for l in "${LAYOUTS[@]}"; do
+            names+=("$(get_name "$l")")
+        done
+        if command -v rofi &>/dev/null; then
+            selected=$(printf '%s\n' "${names[@]}" | rofi -dmenu -p "Layout:")
+        else
+            selected=$(printf '%s\n' "${names[@]}" | dmenu -p "Layout:")
+        fi
+        if [[ -n "$selected" ]]; then
+            for l in "${LAYOUTS[@]}"; do
+                if [[ "$(get_name "$l")" == "$selected" ]]; then
+                    apply_layout "$l"
+                    break
+                fi
+            done
+        fi
+        ;;
+    3|5)
+        current=$(get_current)
+        for i in "${!LAYOUTS[@]}"; do
+            if [[ "${LAYOUTS[$i]}" == "$current" ]]; then
+                next=$(( (i + 1) % ${#LAYOUTS[@]} ))
+                apply_layout "${LAYOUTS[$next]}"
+                break
+            fi
+        done
+        ;;
+    4)
+        current=$(get_current)
+        for i in "${!LAYOUTS[@]}"; do
+            if [[ "${LAYOUTS[$i]}" == "$current" ]]; then
+                prev=$(( (i - 1 + ${#LAYOUTS[@]}) % ${#LAYOUTS[@]} ))
+                apply_layout "${LAYOUTS[$prev]}"
+                break
+            fi
+        done
+        ;;
+esac
+
+current=$(get_current)
+if [[ -n "$current" ]]; then
+    echo "$LABEL $(get_name "$current")"
+else
+    echo "$LABEL none"
+fi

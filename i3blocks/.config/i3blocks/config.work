@@ -56,6 +56,11 @@ command=$SCRIPT_DIR/pomodoro status
 interval=1
 signal=12
 
+[screenlayout]
+command=$SCRIPT_DIR/screenlayout
+interval=once
+signal=13
+
 [keyboard]
 command=$SCRIPT_DIR/keyboard
 label=󰌌
